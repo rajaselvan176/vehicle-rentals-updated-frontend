@@ -11,6 +11,21 @@ const VehicleCard = ({ vehicle, userId }) => {
   const [reviews, setReviews] = useState([]);
   const [averageRating, setAverageRating] = useState(null);
 
+  useEffect(() => {
+    if (showBooking) {
+      const today = new Date();
+      const start = today.toISOString().split("T")[0];
+  
+      const tomorrow = new Date(today);
+      tomorrow.setDate(today.getDate() + 1);
+      const end = tomorrow.toISOString().split("T")[0];
+  
+      setStartDate(start);
+      setEndDate(end);
+    }
+  }, [showBooking]);
+  
+
   // ✅ Fetch Reviews
   useEffect(() => {
     const fetchReviews = async () => {
@@ -140,20 +155,28 @@ const VehicleCard = ({ vehicle, userId }) => {
 
         {showBooking && (
           <div className="mt-4 p-4 border rounded">
-            <label className="block mb-2">Start Date:</label>
-            <input
-              type="date"
-              value={startDate}
-              onChange={(e) => {
-                const newStart = e.target.value;
-                setStartDate(newStart);
-                if (endDate && new Date(endDate) < new Date(newStart)) {
-                  setEndDate("");
-                }
-              }}
-              min={getTodayDate()}
-              className="border p-2 w-full mb-2"
-            />
+<label className="block mb-2">Start Date:</label>
+<input
+  type="date"
+  value={startDate}
+  onChange={(e) => {
+    const newStart = e.target.value;
+    setStartDate(newStart);
+
+    const newStartDate = new Date(newStart);
+    const currentEndDate = new Date(endDate);
+
+    if (!endDate || currentEndDate <= newStartDate) {
+      const newEndDate = new Date(newStartDate);
+      newEndDate.setDate(newEndDate.getDate() + 1);
+      const formattedEndDate = newEndDate.toISOString().split("T")[0];
+      setEndDate(formattedEndDate);
+    }
+  }}
+  min={getTodayDate()}
+  className="border p-2 w-full mb-2"
+/>
+
             <label className="block mb-2">End Date:</label>
             <input
               type="date"
