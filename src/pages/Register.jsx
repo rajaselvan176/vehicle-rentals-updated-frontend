@@ -13,7 +13,7 @@ const Register = () => {
     e.preventDefault();
 
     try {
-      const response = await axios.post("/api/auth/register", { name, email, password });
+      const response = await axios.post("https://vehicle-rentals-updated-backend.onrender.com/api/auth/register", { name, email, password });
       // Upon successful registration, redirect to login page
       navigate("/login");
     } catch (err) {
