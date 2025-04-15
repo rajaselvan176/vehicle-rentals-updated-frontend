@@ -8,7 +8,7 @@ const BookingForm = ({ vehicle, userId }) => {
 
   const handleBooking = async () => {
     try {
-      const response = await axios.post("/api/bookings", {
+      const response = await axios.post("https://vehicle-rentals-updated-backend.onrender.com/api/bookings", {
         userId,
         vehicleId: vehicle._id,
         startDate,
