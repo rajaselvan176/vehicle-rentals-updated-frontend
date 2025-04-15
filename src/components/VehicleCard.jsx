@@ -16,7 +16,7 @@ const VehicleCard = ({ vehicle, userId }) => {
     const fetchReviews = async () => {
       try {
         console.log("Vehicle ID:", vehicle._id);
-        const res = await axios.get(`/api/reviews/vehicle/${vehicle._id}`);
+        const res = await axios.get(`https://vehicle-rentals-updated-backend.onrender.com/api/reviews/vehicle/${vehicle._id}`);
         setReviews(res.data);
         if (res.data.length > 0) {
           const avg =
@@ -35,7 +35,7 @@ const VehicleCard = ({ vehicle, userId }) => {
   useEffect(() => {
     const fetchBookings = async () => {
       try {
-        const response = await axios.get(`api/bookings/${vehicle._id}`);
+        const response = await axios.get(`https://vehicle-rentals-updated-backend.onrender.com/api/bookings/${vehicle._id}`);
         setExistingBookings(response.data);
       } catch (error) {
         console.error("Error fetching bookings:", error);
@@ -88,7 +88,7 @@ const VehicleCard = ({ vehicle, userId }) => {
 
     try {
       await axios.post(
-        "/api/bookings",
+        "https://vehicle-rentals-updated-backend.onrender.com/api/bookings",
         {
           userId,
           vehicleId: vehicle._id,
