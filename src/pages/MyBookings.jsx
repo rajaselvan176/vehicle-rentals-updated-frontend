@@ -49,6 +49,11 @@ const MyBookings = ({ userId }) => {
   };
 
   const handleModify = async (booking) => {
+    if (new Date(newStart) < new Date(booking.startDate)) {
+      alert("New start date cannot be before your original booking date.");
+      return;
+    }
+    
     if (!newStart || !newEnd) {
       alert("Please pick new dates.");
       return;
@@ -175,18 +180,31 @@ const MyBookings = ({ userId }) => {
   if (modifying === booking._id) {
     return !bookingEnded ? (
       <div className="mt-2">
-        <input
-          type="date"
-          value={newStart}
-          onChange={(e) => setNewStart(e.target.value)}
-          className="border p-1 mr-2"
-        />
-        <input
-          type="date"
-          value={newEnd}
-          onChange={(e) => setNewEnd(e.target.value)}
-          className="border p-1 mr-2"
-        />
+       <input
+  type="date"
+  value={newStart}
+  onChange={(e) => {
+    const selectedStart = e.target.value;
+    setNewStart(selectedStart);
+
+    const nextDay = new Date(selectedStart);
+    nextDay.setDate(nextDay.getDate() + 1);
+    const nextDayStr = nextDay.toISOString().split("T")[0];
+    setNewEnd(nextDayStr);
+  }}
+  className="border p-1 mr-2"
+  min={new Date(booking.startDate).toISOString().split("T")[0]}
+/>
+
+
+<input
+  type="date"
+  value={newEnd}
+  onChange={(e) => setNewEnd(e.target.value)}
+  className="border p-1 mr-2"
+  min={newStart || new Date(booking.startDate).toISOString().split("T")[0]}
+/>
+
         <button
           onClick={() => handleModify(booking)}
           className="bg-blue-600 text-white px-2 py-1 rounded mr-2"
@@ -194,11 +212,16 @@ const MyBookings = ({ userId }) => {
           Save
         </button>
         <button
-          onClick={() => setModifying(null)}
-          className="text-gray-600 underline"
-        >
-          Cancel
-        </button>
+  onClick={() => {
+    setModifying(null);
+    setNewStart("");
+    setNewEnd("");
+  }}
+  className="text-gray-600 underline"
+>
+  Cancel
+</button>
+
       </div>
     ) : (
       <p className="mt-3 text-sm italic text-gray-500">
@@ -208,12 +231,17 @@ const MyBookings = ({ userId }) => {
   } else {
     return !bookingEnded ? (
       <div className="mt-3 flex gap-3">
-        <button
-          onClick={() => setModifying(booking._id)}
-          className="bg-yellow-500 text-white px-3 py-1 rounded"
-        >
-          Modify
-        </button>
+       <button
+  onClick={() => {
+    setModifying(booking._id);
+    setNewStart(new Date(booking.startDate).toISOString().split("T")[0]);
+    setNewEnd(new Date(booking.endDate).toISOString().split("T")[0]);
+  }}
+  className="bg-yellow-500 text-white px-3 py-1 rounded"
+>
+  Modify
+</button>
+
         <button
           onClick={() => handleCancel(booking.vehicle._id, booking._id)}
           className="bg-red-500 text-white px-3 py-1 rounded"
