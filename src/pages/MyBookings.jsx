@@ -19,7 +19,7 @@ const MyBookings = ({ userId }) => {
 
     const fetchBookings = async () => {
       try {
-        const response = await axios.get(`/api/bookings/user/${userId}`, {
+        const response = await axios.get(`https://vehicle-rentals-updated-backend.onrender.com/api/bookings/user/${userId}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setBookings(response.data);
@@ -39,7 +39,7 @@ const MyBookings = ({ userId }) => {
     if (!window.confirm("Are you sure you want to cancel this booking?")) return;
 
     try {
-      await axios.delete(`/api/bookings/${vehicleId}/${bookingId}`, {
+      await axios.delete(`https://vehicle-rentals-updated-backend.onrender.com/api/bookings/${vehicleId}/${bookingId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setBookings((prev) => prev.filter((b) => b._id !== bookingId));
@@ -56,7 +56,7 @@ const MyBookings = ({ userId }) => {
 
     try {
       await axios.put(
-        `/api/bookings/${booking.vehicle._id}/${booking._id}`,
+        `https://vehicle-rentals-updated-backend.onrender.com/api/bookings/${booking.vehicle._id}/${booking._id}`,
         {
           startDate: newStart,
           endDate: newEnd,
@@ -66,7 +66,7 @@ const MyBookings = ({ userId }) => {
         }
       );
       setModifying(null);
-      const response = await axios.get(`/api/bookings/user/${userId}`, {
+      const response = await axios.get(`https://vehicle-rentals-updated-backend.onrender.com/api/bookings/user/${userId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setBookings(response.data);
@@ -84,7 +84,7 @@ const MyBookings = ({ userId }) => {
   
     try {
       const response = await axios.post(
-        "/api/reviews",
+        "https://vehicle-rentals-updated-backend.onrender.com/api/reviews",
         {
           vehicleId,
           bookingId,
